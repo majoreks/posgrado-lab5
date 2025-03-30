@@ -24,6 +24,8 @@ class WandbLogger(Logger):
         wandb.run.name = f'{task}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
 
         # TODO: Log weights and gradients to wandb. Doc: https://docs.wandb.ai/ref/python/watch
+        wandb.watch(model, log='all', log_graph=True, log_freq=100)
+
 
 
     def log_reconstruction_training(
@@ -37,15 +39,15 @@ class WandbLogger(Logger):
 
         # TODO: Log train reconstruction loss to wandb
 
-
         # TODO: Log validation reconstruction loss to wandb
 
 
         # TODO: Log a batch of reconstructed images from the validation set
-
-
-        pass
-
+        wandb.log({
+            "Reconstruction/train_loss": train_loss_avg,
+            "Reconstruction/val_loss": val_loss_avg,
+            "Reconstruction/images": wandb.Image(reconstruction_grid)
+        })
 
     def log_classification_training(
         self, 
@@ -73,7 +75,13 @@ class WandbLogger(Logger):
 
         # TODO: Log train accuracy to wandb
         #  Tip: use the tag 'Classification/train_acc'
-
+        wandb.log({
+            "Classification/val_loss": val_loss_avg,
+            "Classification/val_acc": val_acc_avg,
+            "Classification/train_loss": train_loss_avg,
+            "Classification/train_acc": train_acc_avg,
+            "Classification/confusion_matrix": fig,
+        })
 
         pass
 
@@ -104,7 +112,7 @@ class WandbLogger(Logger):
         embeddings = pd.concat(list_dfs, ignore_index=True)
 
         # TODO: Log latent representations (embeddings)
-
+        wandb.log({"embeddings": embeddings})
 
     def log_model_graph(
         self,
