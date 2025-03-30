@@ -63,24 +63,23 @@ class TensorboardLogger(Logger):
         fig: plt.Figure,
     ):
         # TODO: Log confusion matrix figure to tensorboard
+        self.writer.add_figure("Classification/confusion_matrix", fig, epoch)
 
         # TODO: Log validation loss to tensorboard.
         #  Tip: use "Classification/val_loss" as tag
-
+        self.writer.add_scalar("Classification/val_loss", val_loss_avg, epoch)
 
         # TODO: Log validation accuracy to tensorboard.
         #  Tip: use "Classification/val_acc" as tag
-
+        self.writer.add_scalar("Classification/val_acc", val_acc_avg, epoch)
 
         # TODO: Log training loss to tensorboard.
         #  Tip: use "Classification/train_loss" as tag
-
+        self.writer.add_scalar("Classification/train_loss", train_loss_avg, epoch)
 
         # TODO: Log training accuracy to tensorboard.
         #  Tip: use "Classification/train_acc" as tag
-
-
-        pass
+        self.writer.add_scalar("Classification/train_acc", train_acc_avg, epoch)
 
 
     def log_model_graph(
